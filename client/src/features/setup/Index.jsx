@@ -2,11 +2,13 @@ import React from 'react';
 import { Button, Container, Grid, Typography, Box, Divider } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 //components
-import InputField from "./components/InputField/InputField3";
+import InputField from "../../components/InputField/InputField3";
 //helpers
-import { generateRoomName } from './utils/helpers';
+import { generateRoomName } from '../../utils/helpers';
+//assets
+import { VIDEO_MEET_LOGO } from "../../assets";
 
-const JitsiHome = () => {
+const Index = () => {
   const navigate = useNavigate();
   const [subjectName, setSubjectName] = React.useState('');
 
@@ -19,7 +21,16 @@ const JitsiHome = () => {
     <Container sx={{ py: 10 }}>
       <Grid container rowGap={5}>
         <Grid item xs={12}>
-          <Typography variant="h3" fontWeight={700}>
+          <Box
+            component="img"
+            src={VIDEO_MEET_LOGO}
+            alt="video meet logo"
+            sx={{
+              width: "70px",
+              borderRadius: "20px",
+            }}
+          />
+          <Typography variant="h4" fontWeight={700} sx={{ mt: 4 }}>
             Welcome to Video Calling App
           </Typography>
         </Grid>
@@ -58,4 +69,4 @@ const JitsiHome = () => {
   )
 }
 
-export default JitsiHome
+export default Index

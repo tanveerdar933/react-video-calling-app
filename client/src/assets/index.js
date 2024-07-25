@@ -1,0 +1,1 @@
+export { default as VIDEO_MEET_LOGO } from "./imgs/video_meet_icon.jpg";
