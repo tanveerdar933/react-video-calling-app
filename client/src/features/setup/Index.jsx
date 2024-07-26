@@ -10,11 +10,16 @@ import { VIDEO_MEET_LOGO } from "../../assets";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [roomID, setRoomID] = React.useState('');
   const [subjectName, setSubjectName] = React.useState('');
 
   const handleNewMeeting = () => {
     const roomID = generateRoomName();
     navigate(`/join?id=${roomID}&sub=${subjectName}`);
+  }
+
+  const handleJoinMeeting = () => {
+    navigate(`/join?id=${roomID}`);
   }
 
   return (
@@ -53,14 +58,24 @@ const Index = () => {
               </Button>
             </Box>
             <Divider sx={{ fontSize: "20px" }}>or</Divider>
-            <Box>
-              <Typography sx={{ mb: 2, fontWeight: 600 }}>
+            <Box sx={{ display: "flex", flexFlow: "column", gap: 2 }}>
+              <Typography sx={{ fontWeight: 600 }}>
                 Join meeting by room ID
               </Typography>
               <InputField
                 name="room_id"
+                value={roomID}
                 placeholder="Enter Room ID"
+                onChange={(e) => setRoomID(e.target.value)}
               />
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleJoinMeeting}
+                sx={{ maxWidth: "300px" }}
+              >
+                Join Meeting
+              </Button>
             </Box>
           </Box>
         </Grid>

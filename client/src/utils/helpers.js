@@ -1,3 +1,3 @@
 import { nanoid } from 'nanoid';
 
-export const generateRoomName = () => `${nanoid(10)}-${Date.now()}`;
+export const generateRoomName = () => `${(new Date()).getTime()}`;
