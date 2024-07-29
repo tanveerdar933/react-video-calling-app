@@ -82,6 +82,10 @@ const Index = () => {
     meetIframeRef.current = iframeRef;
   };
 
+  const handleDisplayNameChange = displayName => {
+    updateLog(items => [...items, `display name changed to ${displayName}`]);
+  };
+
   // const handleJitsiIFrameRef2 = iframeRef => {
   //   iframeRef.style.marginTop = '10px';
   //   iframeRef.style.border = '10px dashed #df486f';
@@ -104,7 +108,7 @@ const Index = () => {
     apiRef.current = apiObj;
     //when meeting closes
     apiRef.current.on('readyToClose', handleReadyToClose);
-
+    apiRef.current.on('displayNameChange', handleDisplayNameChange);
 
     // apiRef.current.on('knockingParticipant', handleKnockingParticipant);
     // apiRef.current.on('audioMuteStatusChanged', payload => handleAudioStatusChange(payload, 'audio'));
@@ -268,12 +272,12 @@ const Index = () => {
         // }}
         lang='en'
         jwt={JWT_TOKEN}
-        // onApiReady={externalApi => handleApiReady(externalApi)}
+        onApiReady={externalApi => handleApiReady(externalApi)}
         onReadyToClose={handleReadyToClose}
         getIFrameRef={HandleMeetingIframeRef} />
       {/* {renderButtons()} */}
       {/* {renderNewInstance()} */}
-      {/* <Box
+      <Box
         sx={{
           position: "absolute",
           top: "0",
@@ -286,7 +290,7 @@ const Index = () => {
         }}
       >
         {renderLog()}
-      </Box> */}
+      </Box>
       {/* {renderLog()} */}
     </Box>
   );
