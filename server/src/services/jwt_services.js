@@ -10,13 +10,13 @@ const generateJWTToken = (privateKey, { id, name, email, avatar, appId, kid, isM
     context: {
       user: {
         id,
-        name,
+        ...(name && { name }),
         avatar,
-        email,
+        ...(email && { email }),
         moderator: `${isModerator}`
       },
       features: {
-        livestreaming: 'true',
+        livestreaming: 'false',
         recording: 'true',
         transcription: 'true',
         "outbound-call": 'true'

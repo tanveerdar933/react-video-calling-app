@@ -15,7 +15,8 @@ const Index = () => {
   const location = useLocation();
   const navigate = useNavigate();
   // set it in the state
-  const [room_id, setRoomID] = useState("");
+  const [roomName, setRoomName] = useState("");
+  const [jwtToken, setJwtToken] = useState("");
   const [subMatter, setSubMatter] = useState("");
   const [customConfig, setCustomConfig] = useState({});
   //meetings states
@@ -23,14 +24,20 @@ const Index = () => {
   const [handRaised, setHandRaised] = useState(false);
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const id = queryParams.get('id');
-    const sub = queryParams.get('sub');
-    if (id) {
-      setRoomID(id);
+    // const queryParams = new URLSearchParams(location.search);
+    // const id = queryParams.get('id');
+    // const sub = queryParams.get('sub');
+    // if (id) {
+    //   setRoomID(id);
+    // }
+    // if (sub) {
+    //   setSubMatter(sub);
+    // }
+    if (location?.state?.token) {
+      setJwtToken(location.state.token);
     }
-    if (sub) {
-      setSubMatter(sub);
+    if (location?.state?.subject) {
+      setRoomName(location.state.subject);
     }
   }, []);
 
@@ -108,7 +115,7 @@ const Index = () => {
     apiRef.current = apiObj;
     //when meeting closes
     apiRef.current.on('readyToClose', handleReadyToClose);
-    apiRef.current.on('displayNameChange', handleDisplayNameChange);
+    // apiRef.current.on('displayNameChange', handleDisplayNameChange);
 
     // apiRef.current.on('knockingParticipant', handleKnockingParticipant);
     // apiRef.current.on('audioMuteStatusChanged', payload => handleAudioStatusChange(payload, 'audio'));
@@ -263,7 +270,7 @@ const Index = () => {
                 getIFrameRef={handleJaaSIFrameRef} /> */}
       <JaaSMeeting
         appId={APP_ID}
-        roomName={room_id}
+        roomName={roomName}
         // domain={APP_DOMAIN}
         spinner={LoadingMeetings}
         // useStaging={true}
@@ -271,13 +278,13 @@ const Index = () => {
         //   subject: subMatter || 'New Meeting'
         // }}
         lang='en'
-        jwt={JWT_TOKEN}
+        jwt={jwtToken}
         onApiReady={externalApi => handleApiReady(externalApi)}
         onReadyToClose={handleReadyToClose}
         getIFrameRef={HandleMeetingIframeRef} />
       {/* {renderButtons()} */}
       {/* {renderNewInstance()} */}
-      <Box
+      {/* <Box
         sx={{
           position: "absolute",
           top: "0",
@@ -290,7 +297,7 @@ const Index = () => {
         }}
       >
         {renderLog()}
-      </Box>
+      </Box> */}
       {/* {renderLog()} */}
     </Box>
   );

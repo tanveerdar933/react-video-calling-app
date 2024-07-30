@@ -4,15 +4,16 @@ const { v4: uuidv4 } = require('uuid');
 
 const getJWTToken = async (req, res) => {
   try {
+    const { name, email, isModerator } = req.body;
     const token = generateJWTToken(PRIVATE_KEY, {
       id: uuidv4(),
-      name: req.body.name,
-      email: req.body.email,
+      ...(name && { name }),
+      ...(email && { email }),
       // avatar: req.body.avatar,
       avatar: `${SERVER_PUBLIC_STATIC}/man_avatar.png`,
       appId: APP_ID,
       kid: API_KEY,
-      isModerator: req.body.isModerator,
+      ...(isModerator && { isModerator }),
     });
     console.log(token);
     res.json({ token });

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, Container, Grid, Typography, Box, Divider } from "@mui/material";
+import React, { useState } from 'react';
+import { Button, Container, Grid, Typography, Box, Divider, CircularProgress } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 //components
 import InputField from "../../components/InputField/InputField3";
@@ -7,19 +7,56 @@ import InputField from "../../components/InputField/InputField3";
 import { generateRoomName } from '../../utils/helpers';
 //assets
 import { VIDEO_MEET_LOGO } from "../../assets";
+//apis
+import { MeetAPI } from "../../api";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [roomID, setRoomID] = React.useState('');
-  const [subjectName, setSubjectName] = React.useState('');
+  const [roomID, setRoomID] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [subjectName, setSubjectName] = useState('');
+
+  const getJWTMeetToken = async () => {
+    setIsLoading(true);
+    try {
+      const response = await MeetAPI.getJwtToken(JSON.stringify({
+        isModerator: true
+      }));
+      setIsLoading(false);
+      return response;
+    }
+    catch (error) {
+      setIsLoading(false);
+      console.log("Error in getJWTMeetToken:", error);
+      throw error;
+    }
+  }
 
   const handleNewMeeting = () => {
-    const roomID = generateRoomName();
-    navigate(`/join?id=${roomID}&sub=${subjectName}`);
+    getJWTMeetToken()
+      .then(res => {
+        console.log(res);
+        if (res?.token) {
+          navigate(`/join`, {
+            state: {
+              token: res?.token,
+              subject: subjectName || "New Meeting"
+            }
+          });
+        }
+        else {
+          console.log("token not recieved in res?.token:", res);
+        }
+      })
+      .catch(err => {
+        console.log("Error in handleNewMeeting:", err);
+      });
+    // const roomID = generateRoomName();
+    // navigate(`/join?id=${roomID}&sub=${subjectName}`);
   }
 
   const handleJoinMeeting = () => {
-    navigate(`/join?id=${roomID}`);
+    // navigate(`/join?id=${roomID}`);
   }
 
   return (
@@ -54,7 +91,7 @@ const Index = () => {
                 onClick={handleNewMeeting}
                 sx={{ maxWidth: "300px" }}
               >
-                Create New Meeting
+                {isLoading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Create New Meeting"}
               </Button>
             </Box>
             <Divider sx={{ fontSize: "20px" }}>or</Divider>
