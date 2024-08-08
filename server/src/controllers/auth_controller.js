@@ -1,10 +1,12 @@
 const { generateJWTToken } = require('../services/jwt_services');
-const { PRIVATE_KEY, API_KEY, APP_ID, SERVER_PUBLIC_STATIC } = require('../config/env_exports');
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
+const { PRIVATE_KEY_PATH, API_KEY, APP_ID, SERVER_PUBLIC_STATIC } = require('../config/env_exports');
 
 const getJWTToken = async (req, res) => {
   try {
     const { name, email, isModerator } = req.body;
+    const PRIVATE_KEY = fs.readFileSync(PRIVATE_KEY_PATH, 'utf8');
     const token = generateJWTToken(PRIVATE_KEY, {
       id: uuidv4(),
       ...(name && { name }),

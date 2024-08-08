@@ -8,7 +8,6 @@ import LoadingMeetings from "./components/LoadingMeeting";
 //constants
 const APP_DOMAIN = import.meta.env.VITE_APP_DOMAIN;
 const APP_ID = import.meta.env.VITE_APP_APPID;
-const JWT_TOKEN = import.meta.env.VITE_APP_JWT_TOKEN;
 
 const Index = () => {
   //get room id from url query params
@@ -111,10 +110,20 @@ const Index = () => {
     navigate('/');
   };
 
+  const handleTranscriptionChunkReceived = event => {
+    console.log("Transcription chunk received:");
+    for (let key in event) {
+      if (event.hasOwnProperty(key)) {
+        console.log(`${key}:`, event[key]);
+      }
+    }
+  };
+
   const handleApiReady = apiObj => {
     apiRef.current = apiObj;
     //when meeting closes
     apiRef.current.on('readyToClose', handleReadyToClose);
+    apiRef.current.on('transcriptionChunkReceived', handleTranscriptionChunkReceived);
     // apiRef.current.on('displayNameChange', handleDisplayNameChange);
 
     // apiRef.current.on('knockingParticipant', handleKnockingParticipant);

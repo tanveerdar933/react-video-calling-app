@@ -1,9 +1,6 @@
 const jsonwebtoken = require('jsonwebtoken');
-const { PRIVATE_KEY_PATH } = require('../config/env_exports');
-const fs = require('fs');
 
 const generateJWTToken = (privateKey, { id, name, email, avatar, appId, kid, isModerator = false }) => {
-  const privateFileKey = fs.readFileSync(PRIVATE_KEY_PATH, 'utf8');
   const now = new Date();
   const jwt = jsonwebtoken.sign({
     aud: 'jitsi',
@@ -17,7 +14,7 @@ const generateJWTToken = (privateKey, { id, name, email, avatar, appId, kid, isM
       },
       features: {
         livestreaming: 'false',
-        recording: 'true',
+        recording: 'false',
         transcription: 'true',
         "outbound-call": 'true'
       }
@@ -27,7 +24,7 @@ const generateJWTToken = (privateKey, { id, name, email, avatar, appId, kid, isM
     sub: appId,
     exp: Math.round(now.setHours(now.getHours() + 3) / 1000),
     nbf: (Math.round((new Date()).getTime() / 1000) - 10)
-  }, privateFileKey, { algorithm: 'RS256', header: { kid } });
+  }, privateKey, { algorithm: 'RS256', header: { kid } });
 
   return jwt;
 };
